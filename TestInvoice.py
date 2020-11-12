@@ -24,12 +24,20 @@ def test_CanCalucatePurePrice(invoice, products):
     invoice.totalPurePrice(products)
     assert invoice.totalPurePrice(products) == 69.38
 
-def test_CanCalucateTotal(invoice, products):
+def test_CanCalculateTotal(invoice, products):
     invoice.totalPurePrice(products)
     invoice.totalDiscount(products)
     assert invoice.totalPurePrice(products) + invoice.totalDiscount(products) == 75
 
-def test_CanCalucateCostPen(invoice, products):
-    assert products['Pen']['unit_price'] == 3.75
+def test_CanCalculateIndividualTotal(invoice, products):
+    # check first item total
+    products.popitem()
+    assert invoice.totalImpurePrice(products) == 37.5
+    # confirm empty dict
+    products.popitem()
+    assert invoice.totalImpurePrice(products) == 0
+    # check second item total
+    products.update({'Notebook': {'qnt': 5, 'unit_price': 7.5, 'discount': 10}})
+    assert invoice.totalImpurePrice(products) == 37.5
 
 
